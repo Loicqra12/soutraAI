@@ -1,0 +1,238 @@
+[
+  {
+    "id": "prov_001",
+    "name": "Fatou Bintou",
+    "profession": "Coiffeuse à domicile",
+    "description": "Spécialiste en tresses africaines, locks et soins capillaires naturels. Plus de 5 ans d'expérience.",
+    "services": ["Tresses", "Locks", "Défrisage", "Soins capillaires", "Coupe"],
+    "languages": ["Français", "Dioula", "Baoulé"],
+    "location": {
+      "address": "Rue des Jardins, Cocody",
+      "neighborhood": "Cocody",
+      "city": "Abidjan",
+      "country": "Côte d'Ivoire",
+      "latitude": 5.3364,
+      "longitude": -4.0267,
+      "serviceAreas": ["Cocody", "Plateau", "Marcory", "Treichville"]
+    },
+    "contact": {
+      "phone": "+225 07 12 34 56 78",
+      "email": "fatou.bintou@gmail.com",
+      "whatsapp": "+225 07 12 34 56 78",
+      "socialMedia": {
+        "instagram": "@fatou_coiffure",
+        "facebook": "Fatou Coiffure Abidjan"
+      }
+    },
+    "rating": {
+      "average": 4.7,
+      "totalReviews": 48,
+      "distribution": {
+        "5": 32,
+        "4": 12,
+        "3": 3,
+        "2": 1,
+        "1": 0
+      }
+    },
+    "specialties": ["Tresses traditionnelles", "Locks naturels", "Soins bio"],
+    "prices": {
+      "Tresses": 15000,
+      "Locks": 20000,
+      "Défrisage": 12000,
+      "Soins capillaires": 8000,
+      "Coupe": 5000
+    },
+    "isAvailable": true,
+    "profileImageUrl": "assets/images/fatou_profile.jpg",
+    "createdAt": "2024-01-15T10:00:00Z",
+    "updatedAt": "2024-12-20T15:30:00Z"
+  },
+  {
+    "id": "prov_002",
+    "name": "Marie Kouassi",
+    "profession": "Coiffeuse",
+    "description": "Experte en coiffure moderne et traditionnelle. Salon équipé et service à domicile.",
+    "services": ["Coupe", "Coloration", "Brushing", "Mèches", "Soins"],
+    "languages": ["Français", "Baoulé", "Anglais"],
+    "location": {
+      "address": "Avenue Chardy, Plateau",
+      "neighborhood": "Plateau",
+      "city": "Abidjan",
+      "country": "Côte d'Ivoire",
+      "latitude": 5.3197,
+      "longitude": -4.0267,
+      "serviceAreas": ["Plateau", "Cocody", "Deux Plateaux"]
+    },
+    "contact": {
+      "phone": "+225 05 23 45 67 89",
+      "email": "marie.kouassi@yahoo.fr",
+      "whatsapp": "+225 05 23 45 67 89",
+      "socialMedia": {
+        "instagram": "@marie_salon",
+        "tiktok": "@mariecoiffure"
+      }
+    },
+    "rating": {
+      "average": 4.5,
+      "totalReviews": 67,
+      "distribution": {
+        "5": 38,
+        "4": 20,
+        "3": 7,
+        "2": 2,
+        "1": 0
+      }
+    },
+    "specialties": ["Coupe moderne", "Coloration", "Soins professionnels"],
+    "prices": {
+      "Coupe": 7000,
+      "Coloration": 25000,
+      "Brushing": 5000,
+      "Mèches": 18000,
+      "Soins": 10000
+    },
+    "isAvailable": true,
+    "profileImageUrl": "assets/images/marie_profile.jpg",
+    "createdAt": "2024-02-10T14:00:00Z",
+    "updatedAt": "2024-12-20T16:00:00Z"
+  },
+  {
+    "id": "prov_003",
+    "name": "Awa Camara",
+    "profession": "Coiffeuse",
+    "description": "Spécialiste des coiffures de mariage et événements spéciaux.",
+    "services": ["Coiffure mariage", "Tresses", "Chignons", "Maquillage"],
+    "languages": ["Français", "Malinké", "Peul"],
+    "location": {
+      "address": "Quartier Liberté, Yopougon",
+      "neighborhood": "Yopougon",
+      "city": "Abidjan",
+      "country": "Côte d'Ivoire",
+      "latitude": 5.3456,
+      "longitude": -4.0789,
+      "serviceAreas": ["Yopougon", "Abobo", "Adjamé"]
+    },
+    "contact": {
+      "phone": "+225 01 34 56 78 90",
+      "whatsapp": "+225 01 34 56 78 90",
+      "socialMedia": {
+        "instagram": "@awa_mariage",
+        "facebook": "Awa Coiffure Mariage"
+      }
+    },
+    "rating": {
+      "average": 4.8,
+      "totalReviews": 35,
+      "distribution": {
+        "5": 28,
+        "4": 6,
+        "3": 1,
+        "2": 0,
+        "1": 0
+      }
+    },
+    "specialties": ["Coiffures de mariage", "Événements", "Maquillage"],
+    "prices": {
+      "Coiffure mariage": 35000,
+      "Tresses": 12000,
+      "Chignons": 15000,
+      "Maquillage": 20000
+    },
+    "isAvailable": false,
+    "profileImageUrl": "assets/images/awa_profile.jpg",
+    "createdAt": "2024-03-05T09:00:00Z",
+    "updatedAt": "2024-12-20T17:15:00Z"
+  },
+  {
+    "id": "prov_004",
+    "name": "Jean-Baptiste Kone",
+    "profession": "Électricien",
+    "description": "Électricien qualifié pour installations domestiques et dépannages urgents.",
+    "services": ["Installation électrique", "Dépannage", "Réparation", "Maintenance"],
+    "languages": ["Français", "Baoulé"],
+    "location": {
+      "address": "Rue du Commerce, Adjamé",
+      "neighborhood": "Adjamé",
+      "city": "Abidjan",
+      "country": "Côte d'Ivoire",
+      "latitude": 5.3667,
+      "longitude": -4.0167,
+      "serviceAreas": ["Adjamé", "Plateau", "Cocody", "Marcory"]
+    },
+    "contact": {
+      "phone": "+225 07 45 67 89 01",
+      "email": "jb.kone.elec@gmail.com",
+      "whatsapp": "+225 07 45 67 89 01",
+      "socialMedia": {}
+    },
+    "rating": {
+      "average": 4.6,
+      "totalReviews": 89,
+      "distribution": {
+        "5": 56,
+        "4": 25,
+        "3": 6,
+        "2": 2,
+        "1": 0
+      }
+    },
+    "specialties": ["Dépannage urgent", "Installation neuve", "Mise aux normes"],
+    "prices": {
+      "Installation électrique": 50000,
+      "Dépannage": 15000,
+      "Réparation": 25000,
+      "Maintenance": 20000
+    },
+    "isAvailable": true,
+    "profileImageUrl": "assets/images/jean_profile.jpg",
+    "createdAt": "2024-01-20T11:00:00Z",
+    "updatedAt": "2024-12-20T18:00:00Z"
+  },
+  {
+    "id": "prov_005",
+    "name": "Mamadou Traore",
+    "profession": "Plombier",
+    "description": "Plombier expérimenté pour tous travaux de plomberie et sanitaire.",
+    "services": ["Réparation fuite", "Installation sanitaire", "Débouchage", "Maintenance"],
+    "languages": ["Français", "Dioula", "Bambara"],
+    "location": {
+      "address": "Avenue Houphouët-Boigny, Treichville",
+      "neighborhood": "Treichville",
+      "city": "Abidjan",
+      "country": "Côte d'Ivoire",
+      "latitude": 5.2833,
+      "longitude": -4.0000,
+      "serviceAreas": ["Treichville", "Marcory", "Koumassi", "Port-Bouët"]
+    },
+    "contact": {
+      "phone": "+225 05 56 78 90 12",
+      "whatsapp": "+225 05 56 78 90 12",
+      "socialMedia": {
+        "facebook": "Mamadou Plomberie Abidjan"
+      }
+    },
+    "rating": {
+      "average": 4.4,
+      "totalReviews": 72,
+      "distribution": {
+        "5": 42,
+        "4": 22,
+        "3": 6,
+        "2": 2,
+        "1": 0
+      }
+    },
+    "specialties": ["Réparation urgente", "Installation complète", "Débouchage"],
+    "prices": {
+      "Réparation fuite": 12000,
+      "Installation sanitaire": 45000,
+      "Débouchage": 8000,
+      "Maintenance": 15000
+    },
+    "isAvailable": true,
+    "profileImageUrl": "assets/images/mamadou_profile.jpg",
+    "createdAt": "2024-02-28T13:00:00Z",
+    "updatedAt": "2024-12-20T19:30:00Z"
+  }
+]

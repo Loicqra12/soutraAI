@@ -1,0 +1,190 @@
+[
+  {
+    "id": "service_001",
+    "name": "Coiffure",
+    "category": "Beauté",
+    "description": "Services de coiffure professionnelle à domicile ou en salon",
+    "subcategories": [
+      "Tresses",
+      "Locks",
+      "Défrisage",
+      "Coupe",
+      "Coloration",
+      "Brushing",
+      "Soins capillaires",
+      "Coiffure mariage"
+    ],
+    "averagePrice": 15000,
+    "priceRange": {
+      "min": 5000,
+      "max": 35000
+    },
+    "averageDuration": 120,
+    "popularity": 95,
+    "keywords": ["cheveux", "coiffure", "beauté", "tresses", "locks", "coupe"],
+    "aiSuggestions": [
+      "Pensez à préciser le type de coiffure souhaité",
+      "Indiquez si vous préférez à domicile ou en salon",
+      "Mentionnez la longueur de vos cheveux"
+    ]
+  },
+  {
+    "id": "service_002",
+    "name": "Électricité",
+    "category": "Réparation",
+    "description": "Services d'électricité pour installation, réparation et maintenance",
+    "subcategories": [
+      "Installation électrique",
+      "Dépannage urgent",
+      "Réparation",
+      "Maintenance",
+      "Mise aux normes",
+      "Éclairage"
+    ],
+    "averagePrice": 25000,
+    "priceRange": {
+      "min": 10000,
+      "max": 80000
+    },
+    "averageDuration": 180,
+    "popularity": 85,
+    "keywords": ["électricité", "installation", "dépannage", "réparation", "panne"],
+    "aiSuggestions": [
+      "Décrivez précisément le problème électrique",
+      "Indiquez si c'est urgent",
+      "Précisez le type d'installation"
+    ]
+  },
+  {
+    "id": "service_003",
+    "name": "Plomberie",
+    "category": "Réparation",
+    "description": "Services de plomberie pour réparation, installation et maintenance",
+    "subcategories": [
+      "Réparation fuite",
+      "Installation sanitaire",
+      "Débouchage",
+      "Maintenance",
+      "Robinetterie",
+      "Canalisation"
+    ],
+    "averagePrice": 20000,
+    "priceRange": {
+      "min": 8000,
+      "max": 60000
+    },
+    "averageDuration": 150,
+    "popularity": 80,
+    "keywords": ["plomberie", "fuite", "eau", "robinet", "débouchage", "sanitaire"],
+    "aiSuggestions": [
+      "Localisez précisément la fuite ou le problème",
+      "Indiquez l'urgence de l'intervention",
+      "Précisez si l'eau est coupée"
+    ]
+  },
+  {
+    "id": "service_004",
+    "name": "Ménage",
+    "category": "Entretien",
+    "description": "Services de ménage et nettoyage à domicile",
+    "subcategories": [
+      "Ménage complet",
+      "Nettoyage vitres",
+      "Repassage",
+      "Nettoyage après travaux",
+      "Entretien régulier"
+    ],
+    "averagePrice": 12000,
+    "priceRange": {
+      "min": 5000,
+      "max": 25000
+    },
+    "averageDuration": 240,
+    "popularity": 75,
+    "keywords": ["ménage", "nettoyage", "propreté", "repassage", "entretien"],
+    "aiSuggestions": [
+      "Précisez la superficie à nettoyer",
+      "Indiquez la fréquence souhaitée",
+      "Mentionnez les tâches spécifiques"
+    ]
+  },
+  {
+    "id": "service_005",
+    "name": "Livraison",
+    "category": "Transport",
+    "description": "Services de livraison et transport de marchandises",
+    "subcategories": [
+      "Livraison express",
+      "Transport de colis",
+      "Livraison nourriture",
+      "Courses à domicile",
+      "Transport urgent"
+    ],
+    "averagePrice": 3000,
+    "priceRange": {
+      "min": 1000,
+      "max": 15000
+    },
+    "averageDuration": 60,
+    "popularity": 70,
+    "keywords": ["livraison", "transport", "colis", "courses", "express"],
+    "aiSuggestions": [
+      "Indiquez le poids et la taille du colis",
+      "Précisez les adresses de départ et d'arrivée",
+      "Mentionnez si c'est urgent"
+    ]
+  },
+  {
+    "id": "service_006",
+    "name": "Jardinage",
+    "category": "Entretien",
+    "description": "Services d'entretien de jardins et espaces verts",
+    "subcategories": [
+      "Tonte pelouse",
+      "Taille haies",
+      "Plantation",
+      "Arrosage",
+      "Entretien jardin"
+    ],
+    "averagePrice": 18000,
+    "priceRange": {
+      "min": 8000,
+      "max": 40000
+    },
+    "averageDuration": 180,
+    "popularity": 60,
+    "keywords": ["jardinage", "pelouse", "plantes", "entretien", "jardin"],
+    "aiSuggestions": [
+      "Décrivez la taille de votre jardin",
+      "Précisez les travaux à effectuer",
+      "Indiquez la fréquence d'entretien"
+    ]
+  },
+  {
+    "id": "service_007",
+    "name": "Mécanique",
+    "category": "Réparation",
+    "description": "Services de réparation et entretien automobile",
+    "subcategories": [
+      "Réparation moteur",
+      "Vidange",
+      "Pneus",
+      "Freins",
+      "Diagnostic",
+      "Entretien"
+    ],
+    "averagePrice": 35000,
+    "priceRange": {
+      "min": 10000,
+      "max": 100000
+    },
+    "averageDuration": 240,
+    "popularity": 65,
+    "keywords": ["mécanique", "voiture", "réparation", "moteur", "auto"],
+    "aiSuggestions": [
+      "Décrivez le problème de votre véhicule",
+      "Indiquez la marque et le modèle",
+      "Précisez si le véhicule démarre"
+    ]
+  }
+]
