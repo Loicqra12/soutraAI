@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/app_header.dart';
-import '../services/matching_service.dart';
+import 'package:soutra_ai/services/matching_service.dart';
+import 'package:soutra_ai/services/pricing_service.dart';
 import '../services/data_service.dart';
 import '../models/provider.dart';
 
@@ -20,6 +21,8 @@ class _ServiceRequestScreenState extends State<ServiceRequestScreen> {
   bool _isLoading = false;
   List<Provider> _providers = [];
   Map<String, dynamic>? _matchingStats;
+  Map<String, dynamic>? _priceEstimation;
+  bool _isPriceLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -162,7 +165,7 @@ class _ServiceRequestScreenState extends State<ServiceRequestScreen> {
             ),
             const SizedBox(height: 20),
 
-            // Estimation IA
+            // Estimation IA Dynamique
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -172,26 +175,52 @@ class _ServiceRequestScreenState extends State<ServiceRequestScreen> {
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.assessment, color: Colors.blue, size: 24),
+                  _isPriceLoading 
+                    ? const SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : const Icon(Icons.assessment, color: Colors.blue, size: 24),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Estimation de prix (via IA): 10 000 CFA',
-                          style: TextStyle(
+                        Text(
+                          _priceEstimation != null
+                            ? 'Estimation IA: ${PricingService.formatPrice(_priceEstimation!['prix_estime'])}'
+                            : 'Estimation de prix (via IA)',
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
                           ),
                         ),
-                        Text(
-                          '2 prestataires disponible >',
-                          style: TextStyle(
-                            color: Colors.grey[600],
-                            fontSize: 14,
+                        if (_priceEstimation != null) ...[
+                          Text(
+                            'Fourchette: ${PricingService.formatPriceRange(_priceEstimation!['fourchette_min'], _priceEstimation!['fourchette_max'])}',
+                            style: TextStyle(
+                              color: Colors.grey[600],
+                              fontSize: 13,
+                            ),
                           ),
-                        ),
+                          if (_priceEstimation!['contexte'] != null && _priceEstimation!['contexte'].isNotEmpty)
+                            Text(
+                              _priceEstimation!['contexte'].join(' • '),
+                              style: TextStyle(
+                                color: Colors.blue[700],
+                                fontSize: 12,
+                                fontStyle: FontStyle.italic,
+                              ),
+                            ),
+                        ] else
+                          Text(
+                            'Saisissez un service et un quartier',
+                            style: TextStyle(
+                              color: Colors.grey[600],
+                              fontSize: 14,
+                            ),
+                          ),
                       ],
                     ),
                   ),
@@ -476,6 +505,66 @@ class _ServiceRequestScreenState extends State<ServiceRequestScreen> {
   void initState() {
     super.initState();
     _loadProvidersData();
+    
+    // Écouter les changements dans le champ service pour estimation prix
+    _serviceController.addListener(_onServiceChanged);
+    _locationController.addListener(_onLocationChanged);
+  }
+
+
+
+  // Déclencher l'estimation de prix quand le service change
+  void _onServiceChanged() {
+    if (_serviceController.text.isNotEmpty && _locationController.text.isNotEmpty) {
+      _estimatePrice();
+    }
+  }
+
+  // Déclencher l'estimation de prix quand la localisation change
+  void _onLocationChanged() {
+    if (_serviceController.text.isNotEmpty && _locationController.text.isNotEmpty) {
+      _estimatePrice();
+    }
+  }
+
+  // Estimer le prix automatiquement
+  Future<void> _estimatePrice() async {
+    if (_serviceController.text.isEmpty || _locationController.text.isEmpty) {
+      setState(() {
+        _priceEstimation = null;
+      });
+      return;
+    }
+
+    setState(() => _isPriceLoading = true);
+
+    try {
+      String currentSeason = _getCurrentSeason();
+      String currentDay = _getDayFromTimeSlot(_timeSlot);
+      
+      Map<String, dynamic> estimation = await PricingService.estimatePrice(
+        metier: _serviceController.text.toLowerCase(),
+        quartier: _locationController.text,
+        jour: currentDay,
+        heure: _timeSlot.toLowerCase(),
+        saison: currentSeason,
+      );
+
+      setState(() {
+        _priceEstimation = estimation;
+        _isPriceLoading = false;
+      });
+    } catch (e) {
+      print('Erreur estimation prix: $e');
+      setState(() => _isPriceLoading = false);
+    }
+  }
+
+  // Déterminer la saison actuelle
+  String _getCurrentSeason() {
+    int month = DateTime.now().month;
+    // Saison des pluies en Côte d'Ivoire: Mai à Octobre
+    return (month >= 5 && month <= 10) ? 'pluie' : 'sèche';
   }
 
   // Charger les prestataires depuis DataService
@@ -585,6 +674,8 @@ class _ServiceRequestScreenState extends State<ServiceRequestScreen> {
 
   @override
   void dispose() {
+    _serviceController.removeListener(_onServiceChanged);
+    _locationController.removeListener(_onLocationChanged);
     _serviceController.dispose();
     _locationController.dispose();
     super.dispose();

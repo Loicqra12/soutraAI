@@ -67,6 +67,17 @@ dependencies:
   speech_to_text: ^6.6.0
   flutter_tts: ^3.8.5
   permission_handler: ^11.1.0
+  
+  # Assistant Vocal Avancé (inspiré du dépôt externe)
+  # Note: VOSK nécessite une implémentation native ou via FFI
+  # vosk_flutter: ^0.3.45  # À activer si disponible
+  
+  # RAG et Intelligence Avancée
+  vector_math: ^2.1.4
+  collection: ^1.18.0
+  
+  # Traitement de données avancé
+  csv: ^5.0.2
 
 dev_dependencies:
   flutter_test:

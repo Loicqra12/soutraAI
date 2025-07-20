@@ -8,14 +8,16 @@ class GeminiService {
   // Clé API Gemini (à configurer via variables d'environnement)
   static const String _apiKey = String.fromEnvironment(
     'GEMINI_API_KEY',
-    defaultValue: 'YOUR_GEMINI_API_KEY_HERE', // Remplacer par votre clé
+    defaultValue: 'AIzaSyBY4H46SAJLa4UColqoMmJ2e2jBYvuRFF8', // Nouvelle clé API fournie
   );
   
   late final GenerativeModel _model;
   late final GenerativeModel _chatModel;
+  bool _isInitialized = false;
 
   // Initialiser le service Gemini
   void initialize() {
+    if (_isInitialized) return; // Éviter la double initialisation
     _model = GenerativeModel(
       model: 'gemini-2.0-flash',
       apiKey: _apiKey,
@@ -38,6 +40,8 @@ class GeminiService {
       ),
       systemInstruction: Content.system(_getSoutraAISystemPrompt()),
     );
+    
+    _isInitialized = true;
   }
 
   // Prompt système pour Soutra AI

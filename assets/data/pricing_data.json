@@ -1,0 +1,182 @@
+[
+  {
+    "id_service": "001",
+    "metier": "coiffure",
+    "quartier": "Yopougon",
+    "saison": "pluie",
+    "jour": "samedi",
+    "heure": "matin",
+    "prix_reel": 5000
+  },
+  {
+    "id_service": "002",
+    "metier": "plomberie",
+    "quartier": "Cocody",
+    "saison": "sèche",
+    "jour": "lundi",
+    "heure": "soir",
+    "prix_reel": 12000
+  },
+  {
+    "id_service": "003",
+    "metier": "coiffure",
+    "quartier": "Plateau",
+    "saison": "sèche",
+    "jour": "vendredi",
+    "heure": "après-midi",
+    "prix_reel": 7500
+  },
+  {
+    "id_service": "004",
+    "metier": "électricité",
+    "quartier": "Marcory",
+    "saison": "pluie",
+    "jour": "mercredi",
+    "heure": "matin",
+    "prix_reel": 15000
+  },
+  {
+    "id_service": "005",
+    "metier": "ménage",
+    "quartier": "Adjamé",
+    "saison": "sèche",
+    "jour": "samedi",
+    "heure": "matin",
+    "prix_reel": 8000
+  },
+  {
+    "id_service": "006",
+    "metier": "coiffure",
+    "quartier": "Cocody",
+    "saison": "sèche",
+    "jour": "dimanche",
+    "heure": "après-midi",
+    "prix_reel": 10000
+  },
+  {
+    "id_service": "007",
+    "metier": "plomberie",
+    "quartier": "Yopougon",
+    "saison": "pluie",
+    "jour": "mardi",
+    "heure": "soir",
+    "prix_reel": 8500
+  },
+  {
+    "id_service": "008",
+    "metier": "électricité",
+    "quartier": "Plateau",
+    "saison": "sèche",
+    "jour": "jeudi",
+    "heure": "matin",
+    "prix_reel": 18000
+  },
+  {
+    "id_service": "009",
+    "metier": "livraison",
+    "quartier": "Treichville",
+    "saison": "pluie",
+    "jour": "lundi",
+    "heure": "après-midi",
+    "prix_reel": 3000
+  },
+  {
+    "id_service": "010",
+    "metier": "ménage",
+    "quartier": "Cocody",
+    "saison": "sèche",
+    "jour": "vendredi",
+    "heure": "matin",
+    "prix_reel": 12000
+  },
+  {
+    "id_service": "011",
+    "metier": "coiffure",
+    "quartier": "Adjamé",
+    "saison": "pluie",
+    "jour": "samedi",
+    "heure": "soir",
+    "prix_reel": 4500
+  },
+  {
+    "id_service": "012",
+    "metier": "plomberie",
+    "quartier": "Marcory",
+    "saison": "sèche",
+    "jour": "dimanche",
+    "heure": "matin",
+    "prix_reel": 14000
+  },
+  {
+    "id_service": "013",
+    "metier": "électricité",
+    "quartier": "Yopougon",
+    "saison": "pluie",
+    "jour": "mercredi",
+    "heure": "après-midi",
+    "prix_reel": 11000
+  },
+  {
+    "id_service": "014",
+    "metier": "livraison",
+    "quartier": "Plateau",
+    "saison": "sèche",
+    "jour": "mardi",
+    "heure": "soir",
+    "prix_reel": 4000
+  },
+  {
+    "id_service": "015",
+    "metier": "ménage",
+    "quartier": "Treichville",
+    "saison": "pluie",
+    "jour": "jeudi",
+    "heure": "matin",
+    "prix_reel": 6500
+  },
+  {
+    "id_service": "016",
+    "metier": "coiffure",
+    "quartier": "Marcory",
+    "saison": "sèche",
+    "jour": "lundi",
+    "heure": "après-midi",
+    "prix_reel": 8500
+  },
+  {
+    "id_service": "017",
+    "metier": "plomberie",
+    "quartier": "Adjamé",
+    "saison": "pluie",
+    "jour": "vendredi",
+    "heure": "soir",
+    "prix_reel": 9500
+  },
+  {
+    "id_service": "018",
+    "metier": "électricité",
+    "quartier": "Cocody",
+    "saison": "sèche",
+    "jour": "samedi",
+    "heure": "matin",
+    "prix_reel": 20000
+  },
+  {
+    "id_service": "019",
+    "metier": "livraison",
+    "quartier": "Yopougon",
+    "saison": "pluie",
+    "jour": "dimanche",
+    "heure": "après-midi",
+    "prix_reel": 2500
+  },
+  {
+    "id_service": "020",
+    "metier": "ménage",
+    "quartier": "Plateau",
+    "saison": "sèche",
+    "jour": "mercredi",
+    "heure": "soir",
+    "prix_reel": 10500
+  }
+]

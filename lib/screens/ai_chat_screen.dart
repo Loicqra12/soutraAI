@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../widgets/app_header.dart';
 import '../services/gemini_service.dart';
 import '../services/voice_service.dart';
+import '../services/advanced_ai_service.dart';
+import '../services/advanced_tts_service.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 
 class AiChatScreen extends StatefulWidget {
@@ -21,257 +23,45 @@ class _AiChatScreenState extends State<AiChatScreen> {
   List<Content> _chatHistory = [];
   bool _isLoading = false;
   bool _isListening = false;
-  bool _isSpeaking = false;
+  bool _isAdvancedModeEnabled = true; // Mode RAG activé par défaut
+  bool _isTTSEnabled = true; // Synthèse vocale premium activée
 
   @override
   void initState() {
     super.initState();
-    _initializeGemini();
-    _initializeVoice();
-    // Message d'accueil de l'assistant IA
+    _geminiService.initialize();
+    _voiceService.initialize();
+    _initializeAdvancedServices();
+    _addWelcomeMessage();
+  }
+
+  /// Initialise les services avancés (RAG et TTS premium)
+  Future<void> _initializeAdvancedServices() async {
+    try {
+      await AdvancedAIService.initialize();
+      await AdvancedTTSService.initialize();
+      print('✅ Services avancés initialisés (RAG + TTS premium)');
+    } catch (e) {
+      print('⚠️ Erreur initialisation services avancés: $e');
+    }
+  }
+
+  void _addWelcomeMessage() {
     _messages.add({
-      'text': '👋 Salut ! Je suis votre assistant IA Soutra. Comment puis-je vous aider aujourd\'hui ?\n\n💡 Je peux vous aider à :\n• Trouver le bon prestataire\n• Estimer les prix\n• Traduire du nouchi\n• Négocier les tarifs\n\n🎤 Appuyez sur le micro pour parler !',
+      'text': '🚀 Salut ! Je suis votre Assistant IA Soutra ultra-intelligent !\n\n💡 **Nouvelles fonctionnalités avancées :**\n• 🧠 **Mode RAG** : Recherche intelligente dans nos données locales\n• 🎤 **Synthèse vocale premium** : Voix française optimisée\n• 📊 **Analyse contextuelle** : Réponses basées sur vos données réelles\n\n**Comment puis-je vous aider ?**\n• Trouver le meilleur prestataire\n• Estimer les prix avec précision\n• Traduire du nouchi\n• Analyser vos demandes\n\n🎯 **Essayez :** "Trouve-moi un électricien à Cocody" ou "Combien coûte une coiffure ?"',
       'isUser': false,
       'timestamp': DateTime.now(),
     });
   }
 
-  void _initializeGemini() {
-    try {
-      _geminiService.initialize();
-      print('✅ Gemini AI initialisé avec succès');
-    } catch (e) {
-      print('❌ Erreur initialisation Gemini: $e');
-    }
-  }
+  /// Envoie un message avec RAG ou Gemini classique
+  Future<void> _sendMessage() async {
+    final message = _messageController.text.trim();
+    if (message.isEmpty) return;
 
-  void _initializeVoice() {
-    _voiceService.onSpeechResult = (String result) {
-      if (result.isNotEmpty) {
-        _messageController.text = result;
-        _sendMessage(result);
-      }
-    };
-
-    _voiceService.onListeningStateChanged = (bool isListening) {
-      setState(() {
-        _isListening = isListening;
-      });
-    };
-
-    _voiceService.onSpeakingStateChanged = (bool isSpeaking) {
-      setState(() {
-        _isSpeaking = isSpeaking;
-      });
-    };
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[50],
-      appBar: AppHeader(
-        title: 'Assistant IA',
-        showBackButton: true,
-        actions: [
-          IconButton(
-            onPressed: () {
-              // Microphone pour la saisie vocale
-            },
-            icon: const Icon(Icons.mic, color: Colors.white),
-            tooltip: 'Saisie vocale',
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          // Questions suggérées en haut
-          Container(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                _buildSuggestedQuestion('Trouver un prestataire'),
-                const SizedBox(height: 8),
-                _buildSuggestedQuestion('Combien coûte une prestation à Cocody ?'),
-                const SizedBox(height: 8),
-                _buildSuggestedQuestion('Quels services sont les plus demandés ?'),
-              ],
-            ),
-          ),
-          
-          // Zone de chat
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: ListView.builder(
-                controller: _scrollController,
-                itemCount: _messages.length + (_isLoading ? 1 : 0),
-                itemBuilder: (context, index) {
-                  if (index == _messages.length && _isLoading) {
-                    return _buildLoadingIndicator();
-                  }
-                  final message = _messages[index];
-                  return _buildMessageBubble(message);
-                },
-              ),
-            ),
-          ),
-          
-          // Zone de saisie
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.1),
-                  spreadRadius: 1,
-                  blurRadius: 8,
-                  offset: const Offset(0, -2),
-                ),
-              ],
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _messageController,
-                    decoration: InputDecoration(
-                      hintText: 'Message',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(25),
-                        borderSide: BorderSide.none,
-                      ),
-                      filled: true,
-                      fillColor: Colors.grey[100],
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                      prefixIcon: const Icon(Icons.message, color: Colors.grey),
-                    ),
-                    onSubmitted: (text) {
-                      if (text.trim().isNotEmpty) {
-                        _sendMessage(text);
-                      }
-                    },
-                  ),
-                ),
-                const SizedBox(width: 8),
-                FloatingActionButton(
-                  onPressed: _toggleVoiceInput,
-                  backgroundColor: _isListening ? Colors.red : (_isSpeaking ? Colors.orange : Colors.green),
-                  mini: true,
-                  child: Icon(
-                    _isListening ? Icons.mic : (_isSpeaking ? Icons.volume_up : Icons.mic),
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSuggestedQuestion(String text) {
-    return Container(
-      width: double.infinity,
-      margin: const EdgeInsets.only(bottom: 4),
-      child: OutlinedButton(
-        onPressed: () {
-          _messageController.text = text;
-          _sendMessage(text);
-        },
-        style: OutlinedButton.styleFrom(
-          foregroundColor: Colors.black87,
-          side: const BorderSide(color: Colors.grey),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-        ),
-        child: Text(
-          text,
-          style: const TextStyle(fontSize: 14),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMessageBubble(Map<String, dynamic> message) {
-    final isUser = message['isUser'] as bool;
-    final text = message['text'] as String;
-    final timestamp = message['timestamp'] as DateTime;
-    
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      child: Row(
-        mainAxisAlignment: isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (!isUser) ...[
-            CircleAvatar(
-              radius: 16,
-              backgroundColor: Colors.green,
-              child: const Icon(Icons.psychology, color: Colors.white, size: 16),
-            ),
-            const SizedBox(width: 8),
-          ],
-          Flexible(
-            child: Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: isUser ? Colors.green : Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.1),
-                    spreadRadius: 1,
-                    blurRadius: 4,
-                    offset: const Offset(0, 1),
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    text,
-                    style: TextStyle(
-                      color: isUser ? Colors.white : Colors.black87,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    '${timestamp.hour.toString().padLeft(2, '0')}:${timestamp.minute.toString().padLeft(2, '0')}',
-                    style: TextStyle(
-                      fontSize: 10,
-                      color: isUser ? Colors.white70 : Colors.grey[600],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          if (isUser) ...[
-            const SizedBox(width: 8),
-            CircleAvatar(
-              radius: 16,
-              backgroundColor: Colors.grey[300],
-              child: const Icon(Icons.person, color: Colors.grey, size: 16),
-            ),
-          ],
-        ],
-      ),
-    );
-  }
-
-  void _sendMessage(String text) async {
-    if (text.trim().isEmpty) return;
-
-    // Ajouter le message utilisateur
     setState(() {
       _messages.add({
-        'text': text,
+        'text': message,
         'isUser': true,
         'timestamp': DateTime.now(),
       });
@@ -279,46 +69,92 @@ class _AiChatScreenState extends State<AiChatScreen> {
     });
 
     _messageController.clear();
+    _scrollToBottom();
 
     try {
-      // Ajouter le message à l'historique pour Gemini
-      _chatHistory.add(Content.text(text));
+      String response;
       
-      // Obtenir la réponse de Gemini AI
-      String aiResponse = await _geminiService.chatWithGemini(
-        text, 
-        history: _chatHistory.isNotEmpty ? _chatHistory : null
-      );
-      
-      // Ajouter la réponse IA à l'historique
-      _chatHistory.add(Content.text(aiResponse));
-      
+      if (_isAdvancedModeEnabled) {
+        // Mode RAG avancé avec nos datasets locaux
+        response = await AdvancedAIService.generateRAGResponse(message);
+      } else {
+        // Mode Gemini classique
+        _chatHistory.add(Content.text(message));
+        response = await _geminiService.chatWithGemini(
+          message,
+          history: _chatHistory,
+        );
+        _chatHistory.add(Content.text(response));
+      }
+
       setState(() {
         _messages.add({
-          'text': aiResponse,
+          'text': response,
           'isUser': false,
           'timestamp': DateTime.now(),
         });
         _isLoading = false;
       });
-      
-      // Lire la réponse à voix haute
-      await _voiceService.speak(aiResponse);
-      
+
+      _scrollToBottom();
+
+      // Synthèse vocale premium si activée
+      if (_isTTSEnabled) {
+        await AdvancedTTSService.speak(response);
+      }
     } catch (e) {
-      print('❌ Erreur Gemini: $e');
       setState(() {
         _messages.add({
-          'text': 'Désolé, je rencontre un problème technique. Pouvez-vous réessayer ?',
+          'text': 'Désolé, une erreur s\'est produite. Veuillez réessayer.',
           'isUser': false,
           'timestamp': DateTime.now(),
         });
         _isLoading = false;
       });
     }
+  }
+
+  /// Démarre l'écoute vocale
+  Future<void> _startListening() async {
+    if (_isListening) return;
     
-    // Scroll vers le bas
-    Future.delayed(const Duration(milliseconds: 100), () {
+    setState(() => _isListening = true);
+    
+    try {
+      // Configurer le callback pour recevoir le texte reconnu
+      _voiceService.onSpeechResult = (recognizedText) {
+        if (recognizedText.isNotEmpty) {
+          setState(() {
+            _messageController.text = recognizedText;
+          });
+        }
+      };
+      
+      // Démarrer l'écoute
+      bool success = await _voiceService.startListening();
+      if (!success) {
+        throw Exception('Impossible de démarrer la reconnaissance vocale');
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erreur reconnaissance vocale: $e')),
+      );
+    } finally {
+      setState(() => _isListening = false);
+    }
+  }
+
+  /// Arrête l'écoute vocale
+  Future<void> _stopListening() async {
+    if (!_isListening) return;
+    
+    await _voiceService.stopListening();
+    setState(() => _isListening = false);
+  }
+
+  /// Fait défiler vers le bas
+  void _scrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_scrollController.hasClients) {
         _scrollController.animateTo(
           _scrollController.position.maxScrollExtent,
@@ -329,78 +165,297 @@ class _AiChatScreenState extends State<AiChatScreen> {
     });
   }
 
-  // Basculer l'entrée vocale
-  void _toggleVoiceInput() async {
-    if (_isListening) {
-      await _voiceService.stopListening();
-    } else if (_isSpeaking) {
-      await _voiceService.stopSpeaking();
-    } else {
-      bool success = await _voiceService.startListening();
-      if (!success) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Impossible d\'activer le microphone. Vérifiez les permissions.'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    }
-  }
-
-  Widget _buildLoadingIndicator() {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFF8F9FA),
+      appBar: const AppHeader(title: 'Assistant IA Soutra'),
+      body: Column(
         children: [
-          CircleAvatar(
-            radius: 16,
-            backgroundColor: Colors.green,
-            child: const Icon(Icons.psychology, color: Colors.white, size: 16),
+          // Barre de contrôles avancés
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 4,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Row(
+              children: [
+                // Toggle Mode RAG
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: _isAdvancedModeEnabled ? Colors.green.shade50 : Colors.grey.shade100,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: _isAdvancedModeEnabled ? Colors.green : Colors.grey.shade300,
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.psychology,
+                        size: 16,
+                        color: _isAdvancedModeEnabled ? Colors.green : Colors.grey,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        'Mode RAG',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: _isAdvancedModeEnabled ? Colors.green : Colors.grey,
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Switch(
+                        value: _isAdvancedModeEnabled,
+                        onChanged: (value) {
+                          setState(() => _isAdvancedModeEnabled = value);
+                        },
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 12),
+                // Toggle TTS Premium
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: _isTTSEnabled ? Colors.blue.shade50 : Colors.grey.shade100,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: _isTTSEnabled ? Colors.blue : Colors.grey.shade300,
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.volume_up,
+                        size: 16,
+                        color: _isTTSEnabled ? Colors.blue : Colors.grey,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        'TTS Premium',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: _isTTSEnabled ? Colors.blue : Colors.grey,
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Switch(
+                        value: _isTTSEnabled,
+                        onChanged: (value) {
+                          setState(() => _isTTSEnabled = value);
+                        },
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
-          const SizedBox(width: 8),
-          Flexible(
-            child: Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.1),
-                    spreadRadius: 1,
-                    blurRadius: 4,
-                    offset: const Offset(0, 1),
+          // Zone de chat
+          Expanded(
+            child: ListView.builder(
+              controller: _scrollController,
+              padding: const EdgeInsets.all(16),
+              itemCount: _messages.length + (_isLoading ? 1 : 0),
+              itemBuilder: (context, index) {
+                if (index == _messages.length && _isLoading) {
+                  return _buildLoadingMessage();
+                }
+                
+                final message = _messages[index];
+                return _buildMessageBubble(message);
+              },
+            ),
+          ),
+          // Zone de saisie
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 4,
+                  offset: const Offset(0, -2),
+                ),
+              ],
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _messageController,
+                    decoration: InputDecoration(
+                      hintText: 'Tapez votre message...',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25),
+                        borderSide: BorderSide.none,
+                      ),
+                      filled: true,
+                      fillColor: Colors.grey.shade100,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 12,
+                      ),
+                    ),
+                    onSubmitted: (_) => _sendMessage(),
                   ),
-                ],
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    width: 16,
-                    height: 16,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                ),
+                const SizedBox(width: 8),
+                // Bouton micro
+                GestureDetector(
+                  onTap: _isListening ? _stopListening : _startListening,
+                  child: Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: _isListening ? Colors.red : Colors.blue,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      _isListening ? Icons.mic_off : Icons.mic,
+                      color: Colors.white,
                     ),
                   ),
-                  const SizedBox(width: 8),
-                  const Text(
-                    'L\'assistant IA réfléchit...',
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 14,
-                      fontStyle: FontStyle.italic,
+                ),
+                const SizedBox(width: 8),
+                // Bouton envoyer
+                GestureDetector(
+                  onTap: _sendMessage,
+                  child: Container(
+                    width: 48,
+                    height: 48,
+                    decoration: const BoxDecoration(
+                      color: Colors.green,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.send,
+                      color: Colors.white,
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildMessageBubble(Map<String, dynamic> message) {
+    final isUser = message['isUser'] as bool;
+    
+    return Align(
+      alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 16),
+        padding: const EdgeInsets.all(16),
+        constraints: BoxConstraints(
+          maxWidth: MediaQuery.of(context).size.width * 0.8,
+        ),
+        decoration: BoxDecoration(
+          color: isUser ? Colors.blue : Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              message['text'] as String,
+              style: TextStyle(
+                color: isUser ? Colors.white : Colors.black87,
+                fontSize: 16,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  isUser ? Icons.person : Icons.smart_toy,
+                  size: 16,
+                  color: isUser ? Colors.white70 : Colors.grey,
+                ),
+                const SizedBox(width: 4),
+                Text(
+                  isUser ? 'Vous' : (_isAdvancedModeEnabled ? 'Soutra AI (RAG)' : 'Soutra AI'),
+                  style: TextStyle(
+                    color: isUser ? Colors.white70 : Colors.grey,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLoadingMessage() {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 16),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Text(
+              _isAdvancedModeEnabled 
+                ? 'Analyse RAG en cours...' 
+                : 'Réflexion en cours...',
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 14,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
